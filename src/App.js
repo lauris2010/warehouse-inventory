@@ -1,10 +1,13 @@
 import './App.css';
+import Container from "@material-ui/core/Container";
+import Sidebar from './components/Sidebar'
+
 
 function App() {
   return (
-    <div className="App">
-      <h1>da</h1>
-    </div>
+    <Container>
+      <Sidebar/>
+    </Container>
   );
 }
 
