@@ -8,9 +8,9 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import ColorPicker from "material-ui-color-picker";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import ColorPicker from "material-ui-color-picker";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -40,15 +40,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Edit({ id }) {
+function Edit() {
   const db = firebase.firestore();
-  const [product, setProduct] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [oldPrice, setOldPrice] = useState(0);
-  const [oldQuantity, setOldQuantity] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const [errors, edit] = useImmer({
+  const [item, editItem] = useImmer({
+    name: "",
+    type: "",
+    weight: "",
+    color: "",
+    quantity: "",
+    price: "",
+    ean: "",
+  });
+  const [errors, editErrors] = useImmer({
     name: false,
     type: false,
     weight: false,
@@ -59,36 +64,58 @@ function Edit({ id }) {
 
   const classes = useStyles();
 
-  React.useEffect(() => {
-    const getItem = async () => {
-      const productFirebaseRef = await db.collection("products").doc(id).get();
-      const productData = productFirebaseRef.data();
+  const addProduct = async () => {
+    setLoading(true);
+    const submitErrors = Object.keys(item).map((itemKey) => {
+      return checkError(itemKey, item[itemKey]);
+    });
 
-      setProduct(productData);
-      setOldPrice(productData.price);
+    if (submitErrors.some((isError) => isError)) {
       setLoading(false);
-      setOldQuantity(productData.quantity);
-    };
-
-    getItem();
-  }, []);
+      return;
+    }
+    db.collection("products")
+      .add({
+        name: item.name,
+        type: item.type,
+        weight: item.weight,
+        color: item.color,
+        quantity: item.quantity,
+        price: item.price,
+        ean: item.ean,
+      })
+      .then((docRef) => {
+        const docId = docRef.id;
+        setOpen(true);
+      })
+      .catch((err) => {
+        setOpen(false);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const handleChange = (e) => {
     const { value, name, id } = e.target;
+    editItem((prev) => {
+      return { ...prev, [name]: value };
+    });
+    checkError(id, value);
+  };
+
+  const checkError = (key, value) => {
     const stringErrorKeys = ["name", "type", "color"];
-    const isError = stringErrorKeys.includes(id)
+    const isError = stringErrorKeys.includes(key)
       ? value === "" || !isNaN(value)
       : isNaN(value) || value === "";
 
-    edit((draft) => {
-      draft[id] = isError;
+    editErrors((draft) => {
+      draft[key] = isError;
     });
 
-    const productCopy = { ...product };
-    productCopy[name] = value;
-    setProduct(productCopy);
+    return isError;
   };
-
   const handleColorChange = (color) => {
     if (color === undefined) {
       return;
@@ -96,34 +123,11 @@ function Edit({ id }) {
 
     const isError = !color;
 
-    edit((draft) => {
+    editErrors((draft) => {
       draft.color = isError;
     });
 
-    setProduct({ ...product, color });
-  };
-
-  const updateProduct = async () => {
-    setLoading(true);
-    setOpen(true);
-    await db.collection("products").doc(id).set(product);
-
-    if (oldPrice !== product.price) {
-      db.collection("priceHistory").add({
-        key: id,
-        value: product.price,
-        date: new Date(),
-      });
-    }
-
-    if (oldQuantity !== product.quantity) {
-      db.collection("quantityHistory").add({
-        key: id,
-        value: product.quantity,
-        date: new Date(),
-      });
-    }
-    setLoading(false);
+    editItem({ ...item, color });
   };
 
   const handleClose = (event, reason) => {
@@ -143,7 +147,7 @@ function Edit({ id }) {
         name="name"
         id="name"
         onChange={handleChange}
-        value={product.name}
+        value={item.name}
         error={errors.name}
         helperText={errors.name ? "Field cant be empty" : ""}
       />
@@ -153,7 +157,7 @@ function Edit({ id }) {
         name="type"
         id="type"
         defaultValue="Default Value"
-        value={product.type}
+        value={item.type}
         error={errors.type}
         onChange={handleChange}
         helperText={errors.type ? "Field cant be empty" : ""}
@@ -164,10 +168,21 @@ function Edit({ id }) {
         name="weight"
         id="weight"
         defaultValue="Default Value"
-        value={product.weight}
+        value={item.weight}
         error={errors.weight}
         onChange={handleChange}
         helperText={errors.weight ? "This field must contain only numbers" : ""}
+      />
+      <TextField
+        className={classes.textField}
+        label="Ean"
+        name="ean"
+        id="ean"
+        defaultValue="Default Value"
+        value={item.ean}
+        error={errors.ean}
+        onChange={handleChange}
+        helperText={errors.ean ? "This field must contain only numbers" : ""}
       />
       <ColorPicker
         className={classes.textField}
@@ -175,7 +190,7 @@ function Edit({ id }) {
         name="color"
         id="color"
         defaultValue="#000"
-        TextFieldProps={{ value: product.color, error: errors.color }}
+        TextFieldProps={{ value: item.color, error: errors.color }}
         onChange={handleColorChange}
         error={errors.color}
         helperText={errors.color ? "Field cant be empty" : ""}
@@ -186,7 +201,7 @@ function Edit({ id }) {
         name="quantity"
         id="quantity"
         defaultValue="number"
-        value={product.quantity}
+        value={item.quantity}
         onChange={handleChange}
         error={errors.quantity}
         helperText={
@@ -198,9 +213,8 @@ function Edit({ id }) {
         label="Price"
         name="price"
         id="price"
-        defaultValue={0}
-        value={product.price}
-        InputLabelProps={{ shrink: true }}
+        defaultValue="Default Value"
+        value={item.price}
         onChange={handleChange}
         error={errors.price}
         helperText={errors.price ? "This field must contain only numbers" : ""}
@@ -212,22 +226,22 @@ function Edit({ id }) {
               Object.values(errors).some((isErrorTrue) => isErrorTrue) ||
               loading
             }
-            onClick={updateProduct}
+            onClick={addProduct}
+            loading={loading}
             variant="contained"
             color="primary"
             size="small"
           >
             Submit
           </Button>
-          <Snackbar
-            open={open}
-            autoHideDuration={3000}
-            onClose={handleClose}
-            anchorOrigin={{
+          <Snackbar 
+          open={open} 
+          autoHideDuration={3000} 
+          onClose={handleClose}
+          anchorOrigin={{
               vertical: "top",
               horizontal: "right",
-            }}
-          >
+            }}>
             <Alert
               onClose={handleClose}
               severity="success"

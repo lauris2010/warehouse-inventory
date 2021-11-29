@@ -17,6 +17,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CircularProgress from '@mui/material/CircularProgress';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Tooltip from '@mui/material/Tooltip';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 60 },
@@ -52,7 +59,9 @@ const columns = [
     label: 'Price $',
     minWidth: 150,
     align: 'center',
-    format: (value) => value.toFixed(2),
+    format: (value) => {
+      return `$ ${Number(value, 10).toFixed(2)}`;
+    },
   },
   {
     id: 'type',
@@ -70,7 +79,9 @@ const columns = [
     id: 'weight',
     label: 'Weight',
     align: 'center',
-    format: (value) => value
+    format: (value) => {
+      return `${Number(value, 10).toFixed(2)} kg`;
+    },
   },
 ];
 
@@ -82,6 +93,7 @@ export default function ColumnGroupingTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [products, setProducts] = React.useState([])
   const [loading, setLoading] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -94,10 +106,15 @@ export default function ColumnGroupingTable() {
   
   const deleteItem = async (itemId) => {
       const itemToDelete = db.collection('products').doc(itemId);
-
       await itemToDelete.delete()
+      setOpen(true)
   };
-  
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
   const getProducts = () => {
     db.collection('products').onSnapshot((snapshot) =>{
         let tempProducts = []
@@ -137,9 +154,7 @@ export default function ColumnGroupingTable() {
           <TableBody>
             {loading && (
               <TableRow>
-                <TableCell align="center" colSpanTableCell={6}>
                   <CircularProgress/>
-                </TableCell>
               </TableRow>
             )}
             {products
@@ -158,16 +173,35 @@ export default function ColumnGroupingTable() {
                     <TableCell>
                       <ButtonWrapper>
                         <DeleteWrap>
-                          <DeleteIcon onClick = {() => deleteItem(row.id)} />
+                          <Tooltip title="Delete" arrow>
+                            <DeleteIcon onClick = {() => deleteItem(row.id)} />
+                          </Tooltip>
                         </DeleteWrap>
+                        <Snackbar 
+                        open={open} 
+                        autoHideDuration={3000} 
+                        onClose={handleClose}
+                        anchorOrigin={{
+                          vertical: "top",
+                          horizontal: "right",
+                        }}
+                        >
+                        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                          Deleted!
+                        </Alert>
+                        </Snackbar>
                         <EditWrap>
                           <Link to={`/edit/${row.id}`}>
-                            <EditIcon/>
+                            <Tooltip title="Edit" arrow>
+                              <EditIcon/>
+                            </Tooltip>
                           </Link>
                         </EditWrap>
                         <ViewIconWrapper>
                           <Link to={`/view/${row.id}`}>
-                            <OpenInNewIcon/>
+                            <Tooltip title="View" arrow>
+                              <OpenInNewIcon/>
+                            </Tooltip>
                           </Link>
                         </ViewIconWrapper>
                       </ButtonWrapper>
