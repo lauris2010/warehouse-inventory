@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import ColorPicker from "material-ui-color-picker";
+import InputAdornment from '@mui/material/InputAdornment';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -160,7 +161,7 @@ function Edit({ id }) {
       />
       <TextField
         className={classes.textField}
-        label="Weight"
+        label="Weight kg"
         name="weight"
         id="weight"
         defaultValue="Default Value"
@@ -195,7 +196,7 @@ function Edit({ id }) {
       />
       <TextField
         className={classes.textField}
-        label="Price"
+        label="Price $"
         name="price"
         id="price"
         defaultValue={0}
