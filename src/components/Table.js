@@ -1,6 +1,5 @@
 import * as React from 'react';
 import firebase from 'firebase';
-import { db } from '../firebase'
 
 import { Link } from "react-router-dom"
 
@@ -20,70 +19,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Tooltip from '@mui/material/Tooltip';
+import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-
-const columns = [
-  { id: 'name', label: 'Name', minWidth: 60 },
-  {
-    id: 'color',
-    label: 'Color',
-    align: 'right',
-    format: (value) => <div 
-      style={{display: 'flex', justifyContent: 'center'}}
-    >
-      <div 
-        style={
-          {  
-            background: `${value}`, 
-            width: '22px', 
-            height: '22px', 
-            borderRadius: '50%'
-          }
-        }
-      >
-      </div>
-    </div>,
-  },
-  {
-    id: 'ean',
-    label: 'Ean',
-    minWidth: 200,
-    align: 'center',
-    format: (value) => value,
-  },
-  {
-    id: 'price',
-    label: 'Price $',
-    minWidth: 150,
-    align: 'center',
-    format: (value) => {
-      return `$ ${Number(value, 10).toFixed(2)}`;
-    },
-  },
-  {
-    id: 'type',
-    label: 'Type',
-    align: 'center',
-    format: (value) => value
-  },
-  {
-    id: 'quantity',
-    label: 'Quantity',
-    align: 'center',
-    format: (value) => value
-  },
-  {
-    id: 'weight',
-    label: 'Weight',
-    align: 'center',
-    format: (value) => {
-      return `${Number(value, 10).toFixed(2)} kg`;
-    },
-  },
-];
 
 
 export default function ColumnGroupingTable() {
@@ -94,10 +34,71 @@ export default function ColumnGroupingTable() {
   const [products, setProducts] = React.useState([])
   const [loading, setLoading] = React.useState(true);
   const [open, setOpen] = React.useState(false);
+  const { t } = useTranslation()
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
+  const columns = [
+    { id: 'name', label: `${t("product.name")}`, minWidth: 60 },
+    {
+      id: 'color',
+      label: `${t("product.color")}`,
+      align: 'right',
+      format: (value) => <div 
+      style={{display: 'flex', justifyContent: 'center'}}
+      >
+        <div 
+          style={
+            {  
+              background: `${value}`, 
+              width: '22px', 
+              height: '22px', 
+              borderRadius: '50%'
+            }
+          }
+        >
+        </div>
+      </div>,
+    },
+    {
+      id: 'ean',
+      label: `${t("product.ean")}`,
+      minWidth: 200,
+      align: 'center',
+      format: (value) => value,
+    },
+    {
+      id: 'price',
+      label: `${t("product.price")}`,
+      minWidth: 150,
+      align: 'center',
+      format: (value) => {
+        return `$ ${Number(value, 10).toFixed(2)}`;
+      },
+    },
+    {
+      id: 'type',
+      label: `${t("product.type")}`,
+      align: 'center',
+      format: (value) => value
+    },
+    {
+      id: 'quantity',
+      label: `${t("product.quantity")}`,
+      align: 'center',
+      format: (value) => value
+    },
+    {
+      id: 'weight',
+      label: `${t("product.weight")}`,
+      align: 'center',
+      format: (value) => {
+        return `${Number(value, 10).toFixed(2)} kg`;
+      },
+    },
+  ];
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -173,7 +174,7 @@ export default function ColumnGroupingTable() {
                     <TableCell>
                       <ButtonWrapper>
                         <DeleteWrap>
-                          <Tooltip title="Delete" arrow>
+                          <Tooltip title={t("buttons.delete")} arrow>
                             <DeleteIcon onClick = {() => deleteItem(row.id)} />
                           </Tooltip>
                         </DeleteWrap>
@@ -187,19 +188,19 @@ export default function ColumnGroupingTable() {
                         }}
                         >
                         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                          Deleted!
+                          {t("alert.deleted")}
                         </Alert>
                         </Snackbar>
                         <EditWrap>
                           <Link to={`/edit/${row.id}`}>
-                            <Tooltip title="Edit" arrow>
+                            <Tooltip title={t("buttons.edit")} arrow>
                               <EditIcon/>
                             </Tooltip>
                           </Link>
                         </EditWrap>
                         <ViewIconWrapper>
                           <Link to={`/view/${row.id}`}>
-                            <Tooltip title="View" arrow>
+                            <Tooltip title={t("buttons.view")} arrow>
                               <OpenInNewIcon/>
                             </Tooltip>
                           </Link>

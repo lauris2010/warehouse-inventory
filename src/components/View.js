@@ -10,15 +10,14 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { TextField } from '@mui/material';
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from '@mui/material';
 import PriceHistoryChart from './PriceHistoryChart'
 import QuantityHistoryChart from './QuantityHistoryChart'
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import { CardContent } from '@material-ui/core';
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -69,6 +68,7 @@ export default function FullWidthTabs({id}) {
 
   const [value, setValue] = React.useState(0);
   const [product, setProduct] = React.useState({});
+  const { t } = useTranslation()
 
   const classes = useStyles();
 
@@ -99,9 +99,9 @@ export default function FullWidthTabs({id}) {
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab label="preview product" {...a11yProps(0)} />
-            <Tab label="price history" {...a11yProps(1)} />
-            <Tab label="quantity history" {...a11yProps(2)} />
+            <Tab label={t("preview.preview")} {...a11yProps(0)} />
+            <Tab label={t("preview.priceHistory")} {...a11yProps(1)} />
+            <Tab label={t("preview.quantityHistory")}{...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0} dir={theme.direction}>
@@ -112,22 +112,22 @@ export default function FullWidthTabs({id}) {
                   {product.name}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  <strong>Ean: </strong> {product.ean}
+                  <strong>{t("product.ean")}: </strong> {product.ean}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  <strong>Type: </strong> {product.type}
+                  <strong>{t("product.type")}: </strong> {product.type}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  <strong>Weight: </strong> {product.weight}kg
+                  <strong>{t("product.weight")}: </strong> {product.weight}kg
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  <strong>Color: </strong> {product.color}
+                  <strong>{t("product.color")}: </strong> {product.color}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  <strong>Price: </strong> ${product.price} 
+                  <strong>{t("product.price")}: </strong> ${product.price} 
                 </Typography>
                 <Typography variant="body1" color="textSecondary" component="p">
-                  <strong>Quantity: </strong> {product.quantity}
+                  <strong>{t("product.quantity")}: </strong> {product.quantity}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -142,7 +142,7 @@ export default function FullWidthTabs({id}) {
           <ButtonWrapper>
               <Link to="/">
               <Button variant="contained" color="secondary" size="small">
-                Go back
+                {t("buttons.back")}
               </Button>
               </Link>
           </ButtonWrapper>

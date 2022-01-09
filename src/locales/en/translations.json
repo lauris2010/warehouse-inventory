@@ -1,0 +1,62 @@
+{
+    "sidebar": {
+        "title" : "Warehouse Management",
+        "addRow" : "Add product"
+    },
+
+    "product": {
+        "name": "Name",
+		"ean": "EAN",
+		"type": "Type",
+		"weight": "Weight",
+        "color": "Color",
+		"active": "Active",
+		"quantity": "Quantity",
+		"price": "Price"
+    },
+
+    "buttons": {
+        "submit" : "SUBMIT",
+        "back" : "GO BACK",
+        "view" : "View",
+        "edit" : "Edit",
+        "delete" : "Delete"
+
+    },
+
+    "preview": {
+        "preview" : "PREVIEW PRODUCT",
+        "priceHistory" : "PRICE HISTORY",
+        "quantityHistory" : "QUANTITY HISTORY"
+    },
+
+    "alert": {
+        "deleted" : "Deleted!",
+        "submitted" : "Submitted!" 
+    },
+
+    "chart": {
+        "quantity" : "Quantity",
+        "price" : "Price",
+        "date" : "date"
+    },
+
+    "type" : { 
+        "meat" : "Meat",
+        "fruit" : "Fruit",
+        "vegetable" : "Vegetable",
+        "seafood" : "Seafood"
+    },
+    
+    "errors" : {
+        "empty" : "Field cant be empty, or contain numbers",
+        "numbers" : "This field must contain only numbers"
+    },
+    
+    "title" : {
+        "new" : "NEW PRODUCT",
+        "edit" : "EDIT PRODUCT"
+    }
+
+
+}

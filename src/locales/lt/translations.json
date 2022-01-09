@@ -1,0 +1,59 @@
+{
+    "sidebar": {
+        "title" : "Sandelio valdymas",
+        "addRow" : "Naujas Produktas"
+    },
+
+    "product": {
+		"name": "Pavadinimas",
+		"ean": "EAN",
+		"type": "Tipas",
+		"weight": "Svoris",
+		"color": "Spalva",
+		"active": "Aktyvus",
+		"quantity": "Kiekis",
+		"price": "Kaina"
+    },
+
+    "buttons": {
+        "submit" : "IŠSAUGOTI",
+        "back" : "ATGAL",
+        "view" : "Peržiurėti",
+        "edit" : "Koreguoti",
+        "delete" : "Ištrinti"
+    },
+
+    "preview": {
+        "preview" : "PERŽIURĖTI PRODUKTĄ",
+        "priceHistory" : "KAINOS ISTORIJA",
+        "quantityHistory" : "KIEKIO ISTORIJA"
+    },
+
+    "alert": {
+        "deleted" : "Ištrinta!",
+        "submitted" : "Išsaugota!" 
+    },
+
+    "chart": {
+        "quantity" : "Kiekis",
+        "price" : "Kaina",
+        "date" : "data"
+    },
+
+    "type" : { 
+        "meat" : "Mėsa",
+        "fruit" : "Vaisiai",
+        "vegetable" : "Daržovė",
+        "seafood" : "Jūros gėrybės"
+    },
+
+    "errors" : {
+        "empty" : "Laukas negali būti tuščias, arba sudarytas iš skaičių",
+        "numbers" : "Laukas turi būti sudarytas iš skaičių"
+    },
+
+    "title" : {
+        "new" : "NAUJAS PRODUKTAS",
+        "edit" : "KOREGUOTI PRODUKTĄ"
+    }
+}

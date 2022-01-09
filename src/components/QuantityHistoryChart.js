@@ -5,14 +5,14 @@ import { sortData } from "./Util";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import Container from "@material-ui/core/Container";
-
+import { useTranslation } from "react-i18next";
 
 function QuantityHistoryChart({ id }) {
     const [products, setProducts] = useState([]);
-
+    const { t } = useTranslation() 
     const options = {
         title: {
-        text: "Quantity",
+        text: `${t("preview.quantityHistory")}`,
         },
         xAxis: {
 			type: 'datetime',
@@ -27,13 +27,13 @@ function QuantityHistoryChart({ id }) {
 				year: '%Y'
 			},
 			title: {
-				text:  'Date'
+				text:  `${t("chart.date")}`
 			},
 			tickPixelInterval: 200,
 		},
         yAxis: {
 			title: {
-				text: 'Price',
+				text: `${t("chart.quantity")}`,
 			}
 		},
         tooltip: {
@@ -44,7 +44,7 @@ function QuantityHistoryChart({ id }) {
         series: [
         
         {
-        name: 'Quantity',
+        name: `${t("chart.quantity")}`,
         data: products.map((obj) => {
             return [obj.date.toMillis(), Number(obj.value)];
         }),

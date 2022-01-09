@@ -11,6 +11,10 @@ import Button from "@material-ui/core/Button";
 import ColorPicker from "material-ui-color-picker";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -44,6 +48,7 @@ function Edit() {
   const db = firebase.firestore();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation()  
   const [item, editItem] = useImmer({
     name: "",
     type: "",
@@ -116,6 +121,7 @@ function Edit() {
 
     return isError;
   };
+
   const handleColorChange = (color) => {
     if (color === undefined) {
       return;
@@ -139,9 +145,12 @@ function Edit() {
 
   return (
     <Paper className={classes.paper}>
+      <TitleWrapp>
+      {t("title.new")}
+      </TitleWrapp>
       <TextField
         className={classes.textField}
-        label="Name"
+        label= {t("product.name")}
         defaultValue="Default Value"
         variant="standard"
         name="name"
@@ -149,55 +158,55 @@ function Edit() {
         onChange={handleChange}
         value={item.name}
         error={errors.name}
-        helperText={errors.name ? "Field cant be empty" : ""}
+        helperText={errors.name ? `${t("errors.empty")}` : ""}
       />
       <TextField
         className={classes.textField}
-        label="type"
+        label={t("product.type")}
         name="type"
         id="type"
         defaultValue="Default Value"
         value={item.type}
         error={errors.type}
         onChange={handleChange}
-        helperText={errors.type ? "Field cant be empty" : ""}
+        helperText={errors.type ? `${t("errors.empty")}` : ""}
       />
       <TextField
         className={classes.textField}
-        label="Weight"
+        label={t("product.weight")}
         name="weight"
         id="weight"
         defaultValue="Default Value"
         value={item.weight}
         error={errors.weight}
         onChange={handleChange}
-        helperText={errors.weight ? "This field must contain only numbers" : ""}
+        helperText={errors.weight ? `${t("errors.numbers")}` : ""}
       />
       <TextField
         className={classes.textField}
-        label="Ean"
+        label={t("product.ean")}
         name="ean"
         id="ean"
         defaultValue="Default Value"
         value={item.ean}
         error={errors.ean}
         onChange={handleChange}
-        helperText={errors.ean ? "This field must contain only numbers" : ""}
+        helperText={errors.ean ? `${t("errors.numbers")}` : ""}
       />
       <ColorPicker
         className={classes.textField}
-        label="Color"
+        label={t("product.color")}
         name="color"
         id="color"
         defaultValue="#000"
         TextFieldProps={{ value: item.color, error: errors.color }}
         onChange={handleColorChange}
         error={errors.color}
-        helperText={errors.color ? "Field cant be empty" : ""}
+        helperText={errors.color ? `${t("errors.empty")}` : ""}
       />
       <TextField
         className={classes.textField}
-        label="Quantity"
+        label={t("product.quantity")}
         name="quantity"
         id="quantity"
         defaultValue="number"
@@ -205,19 +214,19 @@ function Edit() {
         onChange={handleChange}
         error={errors.quantity}
         helperText={
-          errors.quantity ? "This field must contain only numbers" : ""
+          errors.quantity ? `${t("errors.numbers")}` : ""
         }
       />
       <TextField
         className={classes.textField}
-        label="Price"
+        label={t("product.price")}
         name="price"
         id="price"
         defaultValue="Default Value"
         value={item.price}
         onChange={handleChange}
         error={errors.price}
-        helperText={errors.price ? "This field must contain only numbers" : ""}
+        helperText={errors.price ? `${t("errors.numbers")}` : ""}
       />
       <ButtonWrapper>
         <SubmitButton>
@@ -232,7 +241,7 @@ function Edit() {
             color="primary"
             size="small"
           >
-            Submit
+            {t("buttons.submit")}
           </Button>
           <Snackbar 
           open={open} 
@@ -247,7 +256,7 @@ function Edit() {
               severity="success"
               sx={{ width: "100%" }}
             >
-              Submitted!
+              {t("alert.submitted")}
             </Alert>
           </Snackbar>
         </SubmitButton>
@@ -255,7 +264,7 @@ function Edit() {
           <LinkStyle>
             <Link to="/">
               <Button variant="contained" color="secondary" size="small">
-                Go back
+                {t("buttons.back")}
               </Button>
             </Link>
           </LinkStyle>
@@ -292,3 +301,8 @@ const GoBackButton = styled.div`
   justify-content: center;
   margin-right: 70px;
 `;
+
+const TitleWrapp = styled.h3`
+  display: flex;
+  justify-content: center ;
+`

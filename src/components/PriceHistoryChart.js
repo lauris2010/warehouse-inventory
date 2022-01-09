@@ -4,14 +4,15 @@ import { db } from "../firebase";
 import { sortData } from "./Util";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
-
+import { useTranslation } from "react-i18next";
 
 function PriceHistoryChart({ id }) {
     const [products, setProducts] = useState([]);
-
+    const { t } = useTranslation()
+    
     const options = {
         title: {
-        text: "Price",
+        text: `${t("chart.price")}`,
         },
         xAxis: {
 			type: 'datetime',
@@ -26,13 +27,13 @@ function PriceHistoryChart({ id }) {
 				year: '%Y'
 			},
 			title: {
-				text:  'Date'
+				text:  `${t("chart.date")}`
 			},
 			tickPixelInterval: 200,
 		},
         yAxis: {
 			title: {
-				text: 'Price',
+				text: `${t("chart.price")}`,
 			}
 		},
         tooltip: {
@@ -41,7 +42,7 @@ function PriceHistoryChart({ id }) {
 			shared: true
 		},
         series: [{
-            name: 'Price',
+            name: `${t("chart.price")}`,
             data: products.map((obj) => {
                 return [obj.date.toMillis(), Number(obj.value)];
             }),

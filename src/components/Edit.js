@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import ColorPicker from "material-ui-color-picker";
-import InputAdornment from '@mui/material/InputAdornment';
+import { useTranslation } from "react-i18next";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -48,6 +48,8 @@ function Edit({ id }) {
   const [oldPrice, setOldPrice] = useState(0);
   const [oldQuantity, setOldQuantity] = useState(0);
   const [open, setOpen] = useState(false);
+  
+  const { t } = useTranslation()
 
   const [errors, edit] = useImmer({
     name: false,
@@ -136,54 +138,57 @@ function Edit({ id }) {
 
   return (
     <Paper className={classes.paper}>
+      <TitleWrapp>
+      {t("title.edit")}
+      </TitleWrapp>
       <TextField
         className={classes.textField}
-        label="Name"
-        defaultValue="Default Value"
+        label={t("product.name")}
+        defaultValue= "Default Value"
         variant="standard"
         name="name"
         id="name"
         onChange={handleChange}
         value={product.name}
         error={errors.name}
-        helperText={errors.name ? "Field cant be empty" : ""}
+        helperText={errors.name ? `${t("errors.empty")}` : ""}
       />
       <TextField
         className={classes.textField}
-        label="type"
+        label={t("product.type")}
         name="type"
         id="type"
         defaultValue="Default Value"
         value={product.type}
         error={errors.type}
         onChange={handleChange}
-        helperText={errors.type ? "Field cant be empty" : ""}
+        helperText={errors.type ? `${t("errors.empty")}` : ""}
       />
       <TextField
         className={classes.textField}
-        label="Weight kg"
+        label={t("product.weight")}
         name="weight"
         id="weight"
         defaultValue="Default Value"
         value={product.weight}
         error={errors.weight}
         onChange={handleChange}
-        helperText={errors.weight ? "This field must contain only numbers" : ""}
+        helperText={errors.weight ? `${t("errors.numbers")}` : ""}
       />
       <ColorPicker
         className={classes.textField}
-        label="Color"
+        label={t("product.color")}
         name="color"
         id="color"
         defaultValue="#000"
         TextFieldProps={{ value: product.color, error: errors.color }}
         onChange={handleColorChange}
         error={errors.color}
-        helperText={errors.color ? "Field cant be empty" : ""}
+        helperText={errors.color ? `${t("errors.empty")}` : ""}
       />
       <TextField
         className={classes.textField}
-        label="Quantity"
+        label={t("product.quantity")}
         name="quantity"
         id="quantity"
         defaultValue="number"
@@ -191,12 +196,12 @@ function Edit({ id }) {
         onChange={handleChange}
         error={errors.quantity}
         helperText={
-          errors.quantity ? "This field must contain only numbers" : ""
+          errors.quantity ? `${t("errors.numbers")}` : ""
         }
       />
       <TextField
         className={classes.textField}
-        label="Price $"
+        label={t("product.price")}
         name="price"
         id="price"
         defaultValue={0}
@@ -204,7 +209,7 @@ function Edit({ id }) {
         InputLabelProps={{ shrink: true }}
         onChange={handleChange}
         error={errors.price}
-        helperText={errors.price ? "This field must contain only numbers" : ""}
+        helperText={errors.price ? `${t("errors.numbers")}` : ""}
       />
       <ButtonWrapper>
         <SubmitButton>
@@ -218,7 +223,7 @@ function Edit({ id }) {
             color="primary"
             size="small"
           >
-            Submit
+            {t("buttons.submit")}
           </Button>
           <Snackbar
             open={open}
@@ -234,7 +239,7 @@ function Edit({ id }) {
               severity="success"
               sx={{ width: "100%" }}
             >
-              Submitted!
+              {t("alert.submitted")}
             </Alert>
           </Snackbar>
         </SubmitButton>
@@ -242,7 +247,7 @@ function Edit({ id }) {
           <LinkStyle>
             <Link to="/">
               <Button variant="contained" color="secondary" size="small">
-                Go back
+                {t("buttons.back")}
               </Button>
             </Link>
           </LinkStyle>
@@ -279,3 +284,10 @@ const GoBackButton = styled.div`
   justify-content: center;
   margin-right: 70px;
 `;
+
+const TitleWrapp = styled.h3`
+  display: flex;
+  justify-content: center ;
+  align-items: center;
+  margin-bottom: 40px;
+`

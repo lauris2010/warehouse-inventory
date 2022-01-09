@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled as style, useTheme } from "@mui/material/styles";
 import { Box, Drawer, Typography, List, Divider } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,10 +12,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSelect from "../Nav/LanguageSelect";
+import styled from "styled-components";
 
 const DRAWER_WIDTH = 240;
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+const Main = style("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -34,7 +37,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   })
 );
 
-const AppBar = styled(MuiAppBar, {
+const AppBar = style(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   transition: theme.transitions.create(["margin", "width"], {
@@ -51,7 +54,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const DrawerHeader = styled("div")(({ theme }) => ({
+const DrawerHeader = style("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
@@ -60,6 +63,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Sidebar() {
+  const {t, i18n} = useTranslation()
   const theme = useTheme();
 
   const [open, setOpen] = React.useState(false);
@@ -75,7 +79,7 @@ export default function Sidebar() {
   const menuItems = {
     create: {
       key: "create",
-      title: "Add row",
+      title: `${t("sidebar.addRow")}`,
       route: "/create",
     },
   };
@@ -94,8 +98,11 @@ export default function Sidebar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Inventory
+            {t("sidebar.title")}
           </Typography>
+          <LanguageSelectWrapper>
+            <LanguageSelect/>
+          </LanguageSelectWrapper>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -140,3 +147,11 @@ export default function Sidebar() {
     </Box>
   );
 }
+
+
+const LanguageSelectWrapper = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-right: 20px;
+  flex-grow: 1;
+`
