@@ -64,8 +64,8 @@ function a11yProps(index) {
 }
 
 export default function FullWidthTabs({id}) {
+  console.log('id', id)
   const theme = useTheme();
-
   const [value, setValue] = React.useState(0);
   const [product, setProduct] = React.useState({});
   const { t } = useTranslation()

@@ -45,7 +45,7 @@ export default function ColumnGroupingTable() {
     {
       id: 'color',
       label: `${t("product.color")}`,
-      align: 'right',
+      align: 'center',
       format: (value) => <div 
       style={{display: 'flex', justifyContent: 'center'}}
       >

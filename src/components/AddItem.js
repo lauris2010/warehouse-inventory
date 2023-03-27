@@ -15,6 +15,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { useTranslation } from "react-i18next";
+import Select from '@mui/material/Select';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -160,17 +161,26 @@ function Edit() {
         error={errors.name}
         helperText={errors.name ? `${t("errors.empty")}` : ""}
       />
-      <TextField
-        className={classes.textField}
-        label={t("product.type")}
-        name="type"
-        id="type"
-        defaultValue="Default Value"
-        value={item.type}
-        error={errors.type}
-        onChange={handleChange}
-        helperText={errors.type ? `${t("errors.empty")}` : ""}
-      />
+      <FormControl variant="standard" sx={{ m: 1, minWidth: 190 }}>
+        <InputLabel id="select">{t("product.type")}</InputLabel>
+        <Select
+          id="type"
+          name="type"
+          label="type"
+          value={item.type}
+          onChange={handleChange}
+          error={errors.type}
+          helperText={errors.type ? `${t("errors.empty")}` : ""}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={'Sea'}>{t("type.seafood")}</MenuItem>
+          <MenuItem value={'Fruit'}>{t("type.fruit")}</MenuItem>
+          <MenuItem value={'vegetable'}>{t("type.vegetable")}</MenuItem>
+          <MenuItem value={'meat'}>{t("type.meat")}</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         className={classes.textField}
         label={t("product.weight")}

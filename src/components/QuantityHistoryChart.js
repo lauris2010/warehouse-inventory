@@ -60,13 +60,10 @@ function QuantityHistoryChart({ id }) {
         tempProducts = tempProducts.filter((item) => {
         return item.key === id;
         });
-
         const sortedData = sortData(tempProducts);
-
         setProducts(sortedData);
     });
     };
-
     useEffect(() => {
     getProducts();
     }, []);
